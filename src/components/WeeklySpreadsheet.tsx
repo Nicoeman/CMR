@@ -240,13 +240,21 @@ export default function WeeklySpreadsheet({ activeSpreadsheet, userObjective }: 
                     const imgUrl = exObj ? getExerciseImageUrl(exObj.id, exObj.category) : "https://images.unsplash.com/photo-1517838277536-f5f99be501cd?auto=format&fit=crop&w=600&h=400&q=80";
                     const title = exObj?.name || "Exercício Desconhecido";
                     return (
-                      <div key={exIdx} className="relative shrink-0 group" title={title}>
+                      <div key={exIdx} className="relative shrink-0 group flex items-center justify-center bg-zinc-900 rounded-md overflow-hidden border border-white/5" title={title}>
                         <img
                           src={imgUrl}
                           alt={title}
-                          className="w-7 h-7 rounded-md object-cover border border-white/5 hover:border-[#00FF7F]/30 transition-all"
+                          className="w-7 h-7 object-cover hover:border-[#00FF7F]/30 transition-all"
                           referrerPolicy="no-referrer"
+                          onError={(e) => {
+                            e.currentTarget.style.display = 'none';
+                            const fallback = e.currentTarget.parentElement?.querySelector('.fallback-thumb') as HTMLElement;
+                            if (fallback) fallback.style.display = 'flex';
+                          }}
                         />
+                        <div className="fallback-thumb hidden absolute inset-0 text-gray-600 items-center justify-center pointer-events-none">
+                           <Dumbbell className="w-3.5 h-3.5" />
+                        </div>
                       </div>
                     );
                   })}

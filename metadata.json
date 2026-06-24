@@ -1,0 +1,6 @@
+{
+  "name": "FitPlan Pro",
+  "description": "Aplicativo mobile premium de planilhas de treino para academia e calistenia.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

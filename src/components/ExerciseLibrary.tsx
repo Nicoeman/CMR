@@ -85,13 +85,21 @@ export default function ExerciseLibrary() {
           </button>
 
           {/* Demonstration Execution Image */}
-          <div className="relative h-48 w-full rounded-3xl overflow-hidden border border-white/5 bg-zinc-950">
+          <div className="relative h-48 w-full rounded-3xl overflow-hidden border border-white/5 bg-zinc-900 flex items-center justify-center">
             <img
               src={getExerciseImageUrl(selectedExercise.id, selectedExercise.category)}
               alt={selectedExercise.name}
               className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 hover:scale-105"
               referrerPolicy="no-referrer"
+              onError={(e) => {
+                e.currentTarget.style.display = 'none';
+                const fallback = e.currentTarget.parentElement?.querySelector('.fallback-thumb') as HTMLElement;
+                if (fallback) fallback.style.display = 'flex';
+              }}
             />
+            <div className="fallback-thumb hidden absolute inset-0 text-gray-600 items-center justify-center pointer-events-none">
+               <Dumbbell className="w-12 h-12" />
+            </div>
             <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent"></div>
             <div className="absolute bottom-3.5 left-4 right-4 flex justify-between items-end">
               <span className="text-[9px] text-white font-extrabold bg-black/60 px-2.5 py-1 rounded-lg border border-white/10 uppercase tracking-widest">
@@ -244,13 +252,21 @@ export default function ExerciseLibrary() {
                   className="w-full flex items-center justify-between p-3.5 bg-[#121212] border border-white/5 hover:border-[#00FF7F]/20 rounded-2xl text-left transition-all group"
                 >
                   <div className="flex items-center gap-3">
-                    <div className="w-12 h-12 rounded-xl overflow-hidden border border-white/10 relative bg-zinc-950 shrink-0">
+                    <div className="w-12 h-12 rounded-xl overflow-hidden border border-white/10 relative bg-zinc-900 shrink-0 flex items-center justify-center">
                       <img
                         src={getExerciseImageUrl(ex.id, ex.category)}
                         alt={ex.name}
                         className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
                         referrerPolicy="no-referrer"
+                        onError={(e) => {
+                          e.currentTarget.style.display = 'none';
+                          const fallback = e.currentTarget.parentElement?.querySelector('.fallback-thumb') as HTMLElement;
+                          if (fallback) fallback.style.display = 'flex';
+                        }}
                       />
+                      <div className="fallback-thumb hidden absolute inset-0 text-gray-600 items-center justify-center pointer-events-none">
+                         <Dumbbell className="w-5 h-5" />
+                      </div>
                     </div>
                     <div>
                       <h4 className="text-xs font-black text-white group-hover:text-[#00FF7F] transition-colors line-clamp-1">{ex.name}</h4>

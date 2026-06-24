@@ -572,7 +572,7 @@ export default function Spreadsheets({
           )}
 
           {/* Spreadsheets Grid */}
-          <div className="space-y-4">
+          <div className="flex flex-col pb-24">
             {filteredSpreadsheets.length === 0 ? (
               <div className="text-center py-12 bg-[#121212] rounded-3xl border border-dashed border-white/5">
                 <p className="text-gray-500 text-xs">Nenhuma planilha encontrada com os filtros selecionados.</p>
@@ -585,19 +585,27 @@ export default function Spreadsheets({
                 return (
                   <div
                     key={sheet.id}
-                    className={`bg-[#121212] rounded-3xl p-5 border transition-all overflow-hidden ${
+                    className={`bg-[#121212] rounded-3xl p-5 border transition-all overflow-hidden mb-[20px] ${
                       isActive ? "border-[#00FF7F]/40 shadow-[0_0_15px_rgba(0,255,127,0.05)]" : "border-white/5"
                     }`}
                   >
                     {/* Header Program Cover Image */}
-                    <div className="h-28 -mx-5 -mt-5 mb-4 relative bg-zinc-950 border-b border-white/5 overflow-hidden">
+                    <div className="h-28 -mx-5 -mt-5 mb-4 relative bg-zinc-950 border-b border-white/5 overflow-hidden flex items-center justify-center">
                       <img
                         src={getObjectiveHeroImageUrl(sheet.objective)}
                         alt={sheet.name}
                         className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
                         referrerPolicy="no-referrer"
+                        onError={(e) => {
+                          e.currentTarget.style.display = 'none';
+                          const fallback = e.currentTarget.parentElement?.querySelector('.fallback-hero') as HTMLElement;
+                          if (fallback) fallback.style.display = 'flex';
+                        }}
                       />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent"></div>
+                      <div className="fallback-hero hidden absolute inset-0 bg-gradient-to-br from-zinc-900 to-black items-center justify-center p-4">
+                        <span className="text-white font-bold text-lg text-center leading-tight drop-shadow-md">{sheet.name}</span>
+                      </div>
+                      <div className="absolute inset-0 bg-gradient-to-t from-[#121212] via-transparent to-transparent pointer-events-none"></div>
                     </div>
 
                     {/* Header: Name & Type & Custom Tag */}
@@ -662,31 +670,41 @@ export default function Spreadsheets({
                         const imgUrl = ex ? getExerciseImageUrl(ex.id, ex.category) : "https://images.unsplash.com/photo-1517838277536-f5f99be501cd?auto=format&fit=crop&w=600&h=400&q=80";
                         const title = ex?.name || "Exercício Desconhecido";
                         return (
-                          <div key={itemIdx} className="w-7 h-7 rounded-md overflow-hidden border border-white/5 relative bg-zinc-950 shrink-0 group" title={title}>
+                          <div key={itemIdx} className="w-7 h-7 rounded-md overflow-hidden border border-white/5 relative bg-zinc-900 shrink-0 group flex items-center justify-center" title={title}>
                             <img
                               src={imgUrl}
                               alt={title}
                               className="w-full h-full object-cover group-hover:scale-105 transition-transform"
                               referrerPolicy="no-referrer"
+                              onError={(e) => {
+                                e.currentTarget.style.display = 'none';
+                                const fallback = e.currentTarget.parentElement?.querySelector('.fallback-thumb') as HTMLElement;
+                                if (fallback) fallback.style.display = 'flex';
+                              }}
                             />
+                            <div className="fallback-thumb hidden text-gray-600 items-center justify-center">
+                               <Dumbbell className="w-3.5 h-3.5" />
+                            </div>
                           </div>
                         );
                       })}
                     </div>
 
                     {/* Activation button */}
-                    {isActive ? (
-                      <div className="w-full bg-[#00FF7F]/10 text-[#00FF7F] text-xs font-black py-2.5 rounded-xl text-center border border-[#00FF7F]/20">
-                        ✓ Planilha Ativa no Seu Perfil
-                      </div>
-                    ) : (
-                      <button
-                        onClick={() => onSetActiveSpreadsheet(sheet)}
-                        className="w-full bg-zinc-900 hover:bg-zinc-800 text-white text-xs font-black py-2.5 rounded-xl transition-all border border-white/5 hover:border-white/10"
-                      >
-                        Ativar Esta Planilha
-                      </button>
-                    )}
+                    <div className="mt-2 relative z-10 w-full">
+                      {isActive ? (
+                        <div className="w-full bg-[#00FF7F]/10 text-[#00FF7F] text-xs font-black py-3 rounded-xl text-center border border-[#00FF7F]/20">
+                          ✓ Planilha Ativa no Seu Perfil
+                        </div>
+                      ) : (
+                        <button
+                          onClick={() => onSetActiveSpreadsheet(sheet)}
+                          className="w-full bg-zinc-900 hover:bg-zinc-800 text-white text-xs font-black py-3 rounded-xl transition-all border border-white/5 hover:border-white/10"
+                        >
+                          Ativar Esta Planilha
+                        </button>
+                      )}
+                    </div>
                   </div>
                 );
               })
